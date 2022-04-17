@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <link th:href="@{/css/style.css}"
+          href="../css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .field-error {
+            border-color: #dc3545;
+            color: #dc3545;
+            font-size: 20px;
+        }
+    </style>
+    <title>CodingTest</title>
+</head>
+<body>
+<h1>환율 계산</h1>
+<div class="container">
+<form action="exchangeResultForm.html" th:action th:object="${exchange}" method="post">
+<div th:class="form-wrapper">
+    <div th:class="form-main">송금국가 : 미국(USD)</div>
+</div>
+<div th:class="form-wrapper">
+    <div th:class="form-title">
+        수취국가 :
+    </div>
+    <select th:class="form-select" id="country" th:field="*{country}" onchange="getExchangeInfo()">
+        <option th:value="KRW">한국(KRW)</option>
+        <option th:value="JPY">일본(JPY)</option>
+        <option th:value="PHP">필리핀(PHP)</option>
+    </select>
+</div>
+<div th:class="form-wrapper">
+    <div th:class="form-title">
+    환율 :
+    </div>
+    <span th:class="form-span" id="exchangeResult"></span>
+    <input type="hidden" th:field="*{exchangeRate}" id="exchangeRate"/>
+</div>
+<div th:class="form-wrapper">
+    <div th:class="form-title">
+    송금액 :
+    </div>
+    <input th:class="form-input" th:field="*{sendPrice}" /> USD
+    <p th:class="field-error" th:errors="${exchange.sendPrice}" ></p>
+</div>
+<div th:class="form-wrapper">
+    <button th:class="form-btn" type="submit">submit</button>
+</div>
+</form>
+</div>
+<script th:inline="javascript">
+
+
+    window.onload = () => {
+        getExchangeInfo();
+    }
+
+    const getExchangeInfo = () => {
+        let countrySelect = document.getElementById("country");
+        let selectCountry = countrySelect.options[countrySelect.selectedIndex].value;
+        let country = "USD" + countrySelect.options[countrySelect.selectedIndex].value;
+
+        fetch(`/getExchangeInfo/${country}`, { // url 입력 및 [options] 값 설정
+            method: 'POST',
+        })
+            .then(res => res.text()) //응답 결과를 json으로 파싱
+            .then(res => {
+                document.getElementById("exchangeResult").textContent = res + " " + selectCountry + "/USD";
+                document.getElementById("exchangeRate").value = res;
+            })
+            .catch(err => { // 오류 발생시 오류를 담아서 보여줌
+                console.log('Fetch Error', err);
+            });
+    }
+
+</script>
+</body>
+</html>

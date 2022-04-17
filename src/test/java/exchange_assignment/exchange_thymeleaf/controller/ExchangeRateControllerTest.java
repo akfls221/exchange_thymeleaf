@@ -17,7 +17,7 @@ import org.springframework.web.client.RestTemplate;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ExchangeRateController.class)
-class ExchangeRequestDtoRateTest {
+class ExchangeRateControllerTest {
 
     @MockBean
     ExchangeRateService exchangeService;

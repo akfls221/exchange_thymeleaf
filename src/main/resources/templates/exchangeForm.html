@@ -42,7 +42,7 @@
     송금액 :
     </div>
     <input th:class="form-input" th:field="*{sendPrice}" /> USD
-    <p th:class="field-error" th:errors="${exchange.sendPrice}" ></p>
+    <p th:class="field-error" id="fieldError" th:errors="${exchange.sendPrice}" ></p>
 </div>
 <div th:class="form-wrapper">
     <button th:class="form-btn" type="submit">submit</button>
@@ -64,10 +64,15 @@
         fetch(`/getExchangeInfo/${country}`, { // url 입력 및 [options] 값 설정
             method: 'POST',
         })
-            .then(res => res.text()) //응답 결과를 json으로 파싱
+            .then(res => res.json())
             .then(res => {
-                document.getElementById("exchangeResult").textContent = res + " " + selectCountry + "/USD";
-                document.getElementById("exchangeRate").value = res;
+                if (res.code) {
+                    console.log(res.description);
+                    document.getElementsByClassName("field-error")[0].textContent = res.description;
+                    return;
+                }
+                document.getElementById("exchangeResult").textContent = res.exchangeRate + " " + selectCountry + "/USD";
+                document.getElementById("exchangeRate").value = res.exchangeRate;
             })
             .catch(err => { // 오류 발생시 오류를 담아서 보여줌
                 console.log('Fetch Error', err);

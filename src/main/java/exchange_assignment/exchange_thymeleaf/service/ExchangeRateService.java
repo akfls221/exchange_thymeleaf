@@ -1,6 +1,7 @@
 package exchange_assignment.exchange_thymeleaf.service;
 
 import exchange_assignment.exchange_thymeleaf.controller.form.ExchangeRequestForm;
+import exchange_assignment.exchange_thymeleaf.domain.Exchange;
 import exchange_assignment.exchange_thymeleaf.util.GetApiResult;
 import lombok.RequiredArgsConstructor;
 import org.json.simple.parser.ParseException;
@@ -12,7 +13,7 @@ public class ExchangeRateService {
 
     private final GetApiResult getApiResult;
 
-    public String getExchangeInfo(String country){
+    public Exchange getExchangeInfo(String country){
 
         return getApiResult.getExchangeInfo(country);
     }

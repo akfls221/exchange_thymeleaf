@@ -50,7 +50,7 @@ public class ExchangeRateController {
 
     @PostMapping("/getExchangeInfo/{country}")
     @ResponseBody
-    public String getExchangeInfo(@PathVariable String country) {
+    public Exchange getExchangeInfo(@PathVariable String country) {
         return service.getExchangeInfo(country);
     }
 }
